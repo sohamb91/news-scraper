@@ -2,6 +2,9 @@
 const express = require("express");
 const PORT = 5500;
 const scraperRoutes = require("./routes/scraperRoutes.js");
+const { getNewsItems } = require("./controllers/scraperController.js");
+const cron = require('node-cron');
+
 
 const app = express();
 app.listen(PORT, () => {
@@ -11,3 +14,5 @@ app.listen(PORT, () => {
 app.use(express.json())
 app.use("/scraper", scraperRoutes);
 
+getNewsItems();
+cron.schedule('*/30 * * * * *', getNewsItems);

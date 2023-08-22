@@ -3,11 +3,13 @@ const cheerio = require("cheerio")
 const db = require("../db.js");
 
 const SCRAPER_URL = "https://www.zeit.de/news/index";
+const collectionName = "news_items";
 
 const getNewsItems = (async (req, res) => {
     const browser = await puppeteer.launch({
         headless: true
       });
+    const collectionRef = db.collection(collectionName);
     try {
         const page = await browser.newPage();
         await page.goto(SCRAPER_URL);
@@ -51,8 +53,27 @@ const getNewsItems = (async (req, res) => {
                 return; 
             }
         })
+
+        // delete all documents from collection
+        collectionRef.get()
+        .then(querySnapshot => {
+            const batch = db.batch();
+            querySnapshot.forEach(doc => {
+                batch.delete(doc.ref);
+            });
+            return batch.commit();
+        })
+        .then(() => {
+            console.log('All documents removed from the collection.');
+        })
+        .catch(error => {
+            console.error('Error removing documents:', error);
+            throw new Error();
+        });
+
+
         const promiseData = newsItems.map((item) => {
-            return db.collection(collectionName).add(item)
+            return collectionRef.add(item)
         });
         Promise.all(promiseData).then(results => {
             results.forEach(docRef => {
@@ -68,7 +89,7 @@ const getNewsItems = (async (req, res) => {
         const data = newsItems;
         return res.status(200).json({data});
     } catch {
-        const data = "ann error occurred";
+        const data = "an error occurred";
         return res.status(500).json({data});
     }
       
