@@ -1,0 +1,28 @@
+{
+  "name": "scraperservice",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sohamb91/news-scraper.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sohamb91/news-scraper/issues"
+  },
+  "homepage": "https://github.com/sohamb91/news-scraper#readme",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.12",
+    "dayjs": "^1.11.9",
+    "express": "^4.18.2",
+    "firebase-admin": "^11.10.1",
+    "node-cron": "^3.0.2",
+    "puppeteer": "^21.1.0"
+  }
+}
